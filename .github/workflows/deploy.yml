@@ -1,0 +1,28 @@
+name: "Deploy"
+
+on: workflow_dispatch
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.GANDI_CALENDAR_USERNAME }}
+      HOST: ${{ secrets.GANDI_CALENDAR_HOST }}
+    steps:
+      - name: "Set up ssh key"
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.GANDI_CALENDAR_PRIVATE_KEY }}
+          name: "gandi_key"
+          known_hosts: ${{ secrets.GANDI_CALENDAR_KNOWN_HOSTS }}
+
+      - name: "Checkout master"
+        uses: actions/checkout@v2.3.4
+        with:
+          ref: master
+
+      - name: "Copy configuration files"
+        run: scp -i ~/.ssh/gandi_key conf/* $USERNAME@$HOST:/etc/nixos
+
+      - name: "Build"
+        run: ssh -i ~/.ssh/gandi_key $USERNAME@$HOST 'nixos-rebuild switch'
