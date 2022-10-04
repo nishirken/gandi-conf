@@ -32,6 +32,7 @@
   system.stateVersion = "22.05";
 
   environment.systemPackages = with pkgs; [
+      git
       neovim
       curl
       wget
