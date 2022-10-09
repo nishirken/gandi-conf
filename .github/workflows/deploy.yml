@@ -25,4 +25,4 @@ jobs:
         run: scp -i ~/.ssh/gandi_key conf/* $USERNAME@$HOST:/etc/nixos
 
       - name: "Build"
-        run: ssh -i ~/.ssh/gandi_key $USERNAME@$HOST 'nixos-rebuild switch'
+        run: ssh -i ~/.ssh/gandi_key $USERNAME@$HOST 'nixos-rebuild switch --flake /etc/nixos'

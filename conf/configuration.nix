@@ -10,25 +10,42 @@
   };
 
   services.nginx = {
-      enable = true;
+    enable = true;
 
-      virtualHosts = let root = "/var/www"; ip = "46.226.104.150"; in {
-        "${ip}" = {
-          addSSL = true;
-          sslCertificate = "${root}/ssl/certificate.crt";
-          sslCertificateKey = "${root}/ssl/private.key";
-          root = root;
-          listen = [
-            { addr = ip; port = 443; ssl = true; }
-            { addr = ip; port = 80; }
-          ];
-          locations."/" = {
+    virtualHosts = let
+      root = "/var/www";
+      ip = "46.226.104.150";
+      apiPort = "8081";
+    in {
+      "${ip}" = {
+        addSSL = true;
+        sslCertificate = "${root}/ssl/certificate.crt";
+        sslCertificateKey = "${root}/ssl/private.key";
+        root = root;
+        listen = [
+          { addr = ip; port = 443; ssl = true; }
+          { addr = ip; port = 80; }
+        ];
+        locations = {
+          "/" = {
               index = "index.html";
           };
+          "~ /api/?([a-z]*)" = {
+            proxyPass = "http://localhost:${apiPort}/$1";
+            extraConfig = ''
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_intercept_errors off;
+            '';
+          };
         };
+      };
     };
   };
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 80 443 ];
+  };
   system.stateVersion = "22.05";
 
   environment.systemPackages = with pkgs; [
