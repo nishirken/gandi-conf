@@ -54,6 +54,7 @@
     curl
     wget
     podman-compose
+    jq
   ];
 
   virtualisation = {
