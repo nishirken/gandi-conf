@@ -31,7 +31,7 @@
               index = "index.html";
           };
           "~ /api/?([a-z]*)" = {
-            proxyPass = "http://localhost:${apiPort}/$1";
+            proxyPass = "http://127.0.0.1:${apiPort}/$1";
             extraConfig = ''
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
