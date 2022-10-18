@@ -30,7 +30,7 @@
           "/" = {
               index = "index.html";
           };
-          "~ /api/?([a-z]*)" = {
+          "~ /api/?([a-z/-_]*)" = {
             proxyPass = "http://127.0.0.1:${apiPort}/$1";
             extraConfig = ''
               proxy_set_header Host $host;
