@@ -13,22 +13,24 @@
     enable = true;
 
     virtualHosts = let
-      root = "/var/www";
       ip = "46.226.104.150";
       apiPort = "8081";
     in {
       "${ip}" = {
         addSSL = true;
-        sslCertificate = "${root}/ssl/certificate.crt";
-        sslCertificateKey = "${root}/ssl/private.key";
-        root = root;
+        sslCertificate = "/var/www/ssl/certificate.crt";
+        sslCertificateKey = "/var/www/ssl/private.key";
         listen = [
           { addr = ip; port = 443; ssl = true; }
           { addr = ip; port = 80; }
         ];
         locations = {
           "/" = {
-              index = "index.html";
+            return = "301 https://${ip}/halogen";
+          };
+          "/halogen" = {
+            root = "/var/calendar-halogen";
+            index = "index.html";
           };
           "~ /api/?([a-z/-_]*)" = {
             proxyPass = "http://127.0.0.1:${apiPort}/$1";
