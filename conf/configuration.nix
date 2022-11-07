@@ -26,7 +26,8 @@
         ];
         locations = {
           "/" = {
-            return = "301 https://${ip}/halogen";
+            root = "/var/calendar-angular";
+            index = "index.html";
           };
           "/halogen" = {
             root = "/var/calendar-halogen";
