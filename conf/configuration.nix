@@ -6,7 +6,7 @@
     enable = true;
     passwordAuthentication = false;
     logLevel = "VERBOSE";
-    authorizedKeysFiles = [ "/etc/ssh/authorized_keys" ];
+    authorizedKeysFiles = [ "~/.ssh/authorized_keys" ];
   };
 
   services.nginx = {
