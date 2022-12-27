@@ -28,6 +28,10 @@
           "/" = {
             root = "/var/calendar-angular";
             index = "index.html";
+            tryFiles = "$uri $uri/ $uri.html /index.html";
+          };
+          ".well-known/pki-validation" = {
+            root = "/var/www";
           };
           "/halogen" = {
             root = "/var/calendar-halogen";
